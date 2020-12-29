@@ -22,7 +22,7 @@
   let beginEnabled = false;
   $: beginEnabled = name !== "" && activitySet !== null && !isCreating;
 
-  async function go() {
+  async function go(e) {
     isCreating = true;
     const proj = newProject();
     proj.name = name;
@@ -37,7 +37,9 @@
     const id = proj.id;
     pushRecentProject(id);
     await replace(`/projects/${id}/`);
-    await push(`/projects/${id}/track/`);
+    if (e.detail.button === 1) {
+      await push(`/projects/${id}/track/`);
+    }
   }
 </script>
 
@@ -65,6 +67,7 @@
     </ContentFrame>
     <BottomActionBar
       label="Begin tracking"
+      label2="Save"
       on:click={go}
       disabled={!beginEnabled} />
   {:else}
